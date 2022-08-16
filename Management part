@@ -1,0 +1,75 @@
+from binance.client import Client
+import time
+from datetime import datetime
+from datetime import timedelta
+from pytz import timezone
+
+def managment():
+    # Set all digital currencies data
+    """
+    DIGITAL_CURRENCY_1MINUTE
+    DIGITAL_CURRENCY_3MINUTE
+    DIGITAL_CURRENCY_5MINUTE
+    DIGITAL_CURRENCY_15MINUTE
+    DIGITAL_CURRENCY_30MINUTE
+    DIGITAL_CURRENCY_1HOUR
+    DIGITAL_CURRENCY_2HOUR
+    DIGITAL_CURRENCY_4HOUR
+    DIGITAL_CURRENCY_6HOUR
+    DIGITAL_CURRENCY_8HOUR
+    DIGITAL_CURRENCY_1DAY
+    """
+
+    current_time = datetime.now(timezone('Africa/Accra'))
+    desired_time_1Minute = current_time + (timedelta(minutes=1))
+    desired_time_3Minute = current_time + (timedelta(minutes=3))
+    desired_time_5Minute = current_time + (timedelta(minutes=5))
+    desired_time_15Minute = current_time + (timedelta(minutes=15))
+    desired_time_30Minute = current_time + (timedelta(minutes=30))
+    desired_time_1Hour = current_time + (timedelta(hours=1))
+    desired_time_2Hour = current_time + (timedelta(hours=2))
+    desired_time_4Hour = current_time + (timedelta(hours=4))
+    desired_time_6Hour = current_time + (timedelta(hours=6))
+    desired_time_8Hour = current_time + (timedelta(hours=8))
+    desired_time_1Day = current_time + (timedelta(days=1))
+
+    while (True):
+        try:
+            current_time = datetime.now(timezone('Africa/Accra'))
+            if (current_time.minute == desired_time_1Minute.minute):
+                desired_time_1Minute = current_time + (timedelta(minutes=1))
+                BTCUSDT_1MINUTE.check()
+            if (current_time.minute == desired_time_3Minute.minute):
+                desired_time_3Minute = current_time + (timedelta(minutes=3))
+                BTCUSDT_3MINUTE.check()
+            if (current_time.minute == desired_time_5Minute.minute):
+                desired_time_5Minute = current_time + (timedelta(minutes=5))
+                BTCUSDT_5MINUTE.check()
+            if (current_time.minute == desired_time_15Minute.minute):
+                desired_time_15Minute = current_time + (timedelta(minutes=15))
+                BTCUSDT_15MINUTE.check()
+            if (current_time.minute == desired_time_30Minute.minute):
+                desired_time_30Minute = current_time + (timedelta(minutes=30))
+                BTCUSDT_30MINUTE.check()
+            if (current_time.hour == desired_time_1Hour.hour):
+                desired_time_1Hour = current_time + (timedelta(hours=1))
+                BTCUSDT_1HOUR.check()
+            if (current_time.hour == desired_time_2Hour.hour):
+                desired_time_2Hour = current_time + (timedelta(hours=2))
+                BTCUSDT_2HOUR.check()
+            if (current_time.hour == desired_time_4Hour.hour):
+                desired_time_4Hour = current_time + (timedelta(hours=4))
+                BTCUSDT_4HOUR.check()
+            if (current_time.hour == desired_time_6Hour.hour):
+                desired_time_6Hour = current_time + (timedelta(hours=6))
+                BTCUSDT_6HOUR.check()
+            if (current_time.hour == desired_time_8Hour.hour):
+                desired_time_8Hour = current_time + (timedelta(hours=8))
+                BTCUSDT_8HOUR.check()
+            if (current_time.day == desired_time_1Day.day):
+                desired_time_1Day = current_time + (timedelta(days=1))
+                BTCUSDT_1DAY.check()
+
+            time.sleep(1)
+        except Exception as error:
+            print("Connection time out!", error)
