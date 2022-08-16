@@ -1,2 +1,1 @@
-# Binance-trader-Bot
-BinanceTraderBot
+# BinanceTraderBot
