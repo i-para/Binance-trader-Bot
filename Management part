@@ -70,6 +70,7 @@ def managment():
                 desired_time_1Day = current_time + (timedelta(days=1))
                 BTCUSDT_1DAY.check()
 
+
             time.sleep(1)
         except Exception as error:
             print("Connection time out!", error)
