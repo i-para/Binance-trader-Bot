@@ -1,0 +1,35 @@
+def data_receive(pair,since, to,time_frame):
+   print("Please wait ... ")
+   print("Time frame data :", time_frame,"Since: ",since,"---","To: ",to)
+   return public_client.get_historical_klines(pair,
+                                              time_frame,
+                                              since.strftime('%Y-%m-%d %H:%M'),
+                                              to.strftime('%Y-%m-%d %H:%M'))
+                                               
+ time_frame_list = {
+    '1MINUTE': Client.KLINE_INTERVAL_1MINUTE,
+    '3MINUTE': Client.KLINE_INTERVAL_3MINUTE,
+    '5MINUTE': Client.KLINE_INTERVAL_5MINUTE,
+    '15MINUTE': Client.KLINE_INTERVAL_15MINUTE,
+    '30MINUTE': Client.KLINE_INTERVAL_30MINUTE,
+    '1HOUR': Client.KLINE_INTERVAL_1HOUR,
+    '2HOUR': Client.KLINE_INTERVAL_2HOUR,
+    '4HOUR': Client.KLINE_INTERVAL_4HOUR,
+    '6HOUR': Client.KLINE_INTERVAL_6HOUR,
+    '8HOUR': Client.KLINE_INTERVAL_8HOUR,
+    '1DAY': Client.KLINE_INTERVAL_1DAY
+}
+current_time = datetime(2021, 7, 1, 00, 00, 3)
+since_time = datetime(2021, 1, 1, 00, 00, 3)
+
+#BTCUSDT
+print(data_receive("BTCUSDT",since_time,current_time,time_frame_list['1MINUTE']))                                                 
+ 
+#ETHUSDT
+print(data_receive("ETHUSDT",since_time,current_time,time_frame_list['5MINUTE']))                                                 
+ 
+#DOTUSDT
+print(data_receive("ETHUSDT",since_time,current_time,time_frame_list['15MINUTE']))                                                 
+ 
+        
+        
