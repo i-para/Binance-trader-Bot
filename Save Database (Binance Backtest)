@@ -1,0 +1,156 @@
+#>#>#>#>#>#>#>#>#>#>#>#>#>#> LIBRARIES <#<#<#<#<#<#<#<#<#<#<#<#<<#<#<#
+
+from datetime import datetime
+from datetime import timedelta
+from binance.client import Client
+from pytz import timezone
+import pandas as pd
+import time
+
+#>#>#>#>#>#>#>#>#>#>#>#>#>#> CLASS & FUNCTIONS <#<#<#<#<#<#<#<#<#<#<#<#<<#<#<#
+
+class DigitalCurrency:
+    def __init__(self, pair, time_frame, time_origin):
+        # Class Features
+        self.pair = pair
+        self.time_frame = time_frame
+        self.time_origin = time_origin
+        # Variables
+        self.data_counter = 0
+        self.data_index = 1
+        
+        # Dictionary & List
+        self.data = {}
+        self.list_of_data = []
+
+        # Database initialize
+        self.my_data_base = []
+
+        if delta_time_list[self.time_frame][0] == "minute":
+            self.time_delta = since_time - timedelta(minutes=(delta_time_list[self.time_frame][1] * 10))
+        elif delta_time_list[self.time_frame][0] == "hour":
+            self.time_delta = since_time - timedelta(hours=(delta_time_list[self.time_frame][1] * 10))
+        elif delta_time_list[self.time_frame][0] == "day":
+            self.time_delta = since_time - timedelta(days=(delta_time_list[self.time_frame][1] * 10))
+
+        self.data_init()
+
+    def data_init(self):
+        self.data_receive(since=self.time_delta, to=current_time)
+
+    def data_receive(self , since, to):
+        print("Time Frame: %s" % (self.time_frame),
+              " ---   Since: ", since.strftime('%Y-%m-%d %H:%M'), " ---   To:  ", to.strftime('%Y-%m-%d %H:%M'))
+        print("Please wait ... ")
+        print(since.strftime('%Y-%m-%d %H:%M'))
+        print(to.strftime('%Y-%m-%d %H:%M'))
+        print(to - since)
+        self.values = public_client.get_historical_klines(self.pair,
+                                                        time_frame_list[self.time_frame],
+                                                        since.strftime('%Y-%m-%d %H:%M'),
+                                                        to.strftime('%Y-%m-%d %H:%M'))
+        print(len(self.values))
+        print("Done!\n")
+            
+    def data_set(self):
+        while (self.data_counter < (len(self.values))):
+            if self.data_index == 1:
+                self.data['Current Open'] = (float(self.values[self.data_counter][self.data_index]))
+                self.data_index += 1
+            if self.data_index == 2:
+                self.data['Current High'] = (float(self.values[self.data_counter][self.data_index]))
+                self.data_index += 1
+            if self.data_index == 3:
+                self.data['Current Low'] = (float(self.values[self.data_counter][self.data_index]))
+                self.data_index += 1
+            if self.data_index == 4:
+                self.data['Current Close'] = (float(self.values[self.data_counter][self.data_index]))
+                self.data_index += 1
+            if self.data_index == 5:
+                self.data['Current Volume'] = (float(self.values[self.data_counter][self.data_index]))
+                self.data_index += 1
+            if self.data_index == 6:
+                self.data['Current Time'] = (float(self.values[self.data_counter][self.data_index]))
+
+            self.my_data_base.append(dict(self.data))
+            self.data_counter += 1
+            self.data_index = 1
+        self.csv_produce()
+
+    def csv_produce(self):
+        my_df = pd.DataFrame(self.my_data_base)
+        start_time = since_time.strftime('%Y-%m-%d')
+        end_time = current_time.strftime('%Y-%m-%d')
+        my_df.to_json(f'\\Mydata-{self.pair}-{self.time_frame}-{start_time}-{end_time}.json')
+        print("JSON produce successfully")
+
+def management(time_range):
+    global current_time, all_pair_data, public_client, since_time
+
+    public_client = Client()
+    all_pair_data = {}
+
+    current_time = datetime.now(timezone('Africa/Accra'))
+    since_time = current_time - (timedelta(days=time_range))
+
+    BTCUSDT_1MINUTE = DigitalCurrency(pair='BTCUSDT', time_frame='1MINUTE', time_origin=since_time)
+    BTCUSDT_3MINUTE = DigitalCurrency(pair='BTCUSDT', time_frame='3MINUTE', time_origin=since_time)
+    BTCUSDT_5MINUTE = DigitalCurrency(pair='BTCUSDT', time_frame='5MINUTE', time_origin=since_time)
+    BTCUSDT_15MINUTE = DigitalCurrency(pair='BTCUSDT', time_frame='15MINUTE', time_origin=since_time)
+    BTCUSDT_30MINUTE = DigitalCurrency(pair='BTCUSDT', time_frame='30MINUTE', time_origin=since_time)
+    BTCUSDT_1HOUR = DigitalCurrency(pair='BTCUSDT', time_frame='1HOUR', time_origin=since_time)
+    BTCUSDT_2HOUR = DigitalCurrency(pair='BTCUSDT', time_frame='2HOUR', time_origin=since_time)
+    BTCUSDT_4HOUR = DigitalCurrency(pair='BTCUSDT', time_frame='4HOUR', time_origin=since_time)
+    BTCUSDT_6HOUR = DigitalCurrency(pair='BTCUSDT', time_frame='6HOUR', time_origin=since_time)
+    BTCUSDT_8HOUR = DigitalCurrency(pair='BTCUSDT', time_frame='8HOUR', time_origin=since_time)
+    BTCUSDT_1DAY = DigitalCurrency(pair='BTCUSDT', time_frame='1DAY', time_origin=since_time)
+
+    print("\n\nData receiving is finished!")
+
+    BTCUSDT_1MINUTE.data_set()
+    BTCUSDT_3MINUTE.data_set()
+    BTCUSDT_5MINUTE.data_set()
+    BTCUSDT_15MINUTE.data_set()
+    BTCUSDT_30MINUTE.data_set()
+    BTCUSDT_1HOUR.data_set()
+    BTCUSDT_2HOUR.data_set()
+    BTCUSDT_4HOUR.data_set()
+    BTCUSDT_6HOUR.data_set()
+    BTCUSDT_8HOUR.data_set()
+    BTCUSDT_1DAY.data_set()
+    print("\n\nData setting is finished!")
+    print("\n\nProcess is finished")
+
+#>#>#>#>#>#>#>#>#>#>#>#>#>#> MAIN <#<#<#<#<#<#<#<#<#<#<#<#<<#<#<#
+
+# Time Frames
+time_frame_list = {
+    '1MINUTE': Client.KLINE_INTERVAL_1MINUTE,
+    '3MINUTE': Client.KLINE_INTERVAL_3MINUTE,
+    '5MINUTE': Client.KLINE_INTERVAL_5MINUTE,
+    '15MINUTE': Client.KLINE_INTERVAL_15MINUTE,
+    '30MINUTE': Client.KLINE_INTERVAL_30MINUTE,
+    '1HOUR': Client.KLINE_INTERVAL_1HOUR,
+    '2HOUR': Client.KLINE_INTERVAL_2HOUR,
+    '4HOUR': Client.KLINE_INTERVAL_4HOUR,
+    '6HOUR': Client.KLINE_INTERVAL_6HOUR,
+    '8HOUR': Client.KLINE_INTERVAL_8HOUR,
+    '1DAY': Client.KLINE_INTERVAL_1DAY
+}
+
+# Delta Times
+delta_time_list = {
+    '1MINUTE': ["minute",1],
+    '3MINUTE': ["minute",3],
+    '5MINUTE': ["minute",5],
+    '15MINUTE': ["minute",15],
+    '30MINUTE': ["minute",30],
+    '1HOUR': ["hour",1],
+    '2HOUR': ["hour",2],
+    '4HOUR': ["hour",4],
+    '6HOUR': ["hour",6],
+    '8HOUR': ["hour",8],
+    '1DAY': ["day",1]
+}
+
+management(time_range=60)
