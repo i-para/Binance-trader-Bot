@@ -65,6 +65,8 @@ def add_pair():
         lbl_chosen_margin['text']==''):
         mesagebox.showerror('Error','Please fill all fields')
         
+        
+        
     elif(len(all_pair_info)==0):
         all_pair_info[a]={}
         all_pair_info[a]["Pair Name"]=str(lbl_chosen_pair['text'])
