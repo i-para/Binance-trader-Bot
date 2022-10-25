@@ -1,0 +1,45 @@
+###############################################################################
+
+from pytz import timezone
+from datetime import datetime
+import time
+
+###############################################################################
+
+def management(general_dict, exchange_dc_list):
+    previous_error = "None"
+    pre_current_min = datetime.now(timezone('Africa/Accra')).minute
+    while True:
+        try:
+            current_time = datetime.now(timezone('Africa/Accra'))
+            #local_current_time = datetime.now(timezone('Asia/Tehran'))
+            if (current_time.second % 5 == 0):
+                for dc_object in exchange_dc_list:
+                    dc_object.trade()
+            if (current_time.second > 2) and (current_time.minute != pre_current_min):
+                pre_current_min = current_time.minute
+                for general_object in general_dict.values():
+                    if (general_object.time_frame_settings[general_object.time_frame][1] == "minute") and\
+                                (current_time.minute % general_object.time_frame_settings[general_object.time_frame][2] == 0):
+                        if not general_object.confirmation: general_object.update_main_layer()
+                        else: general_object.update_confirmation_layer()
+                    elif (current_time.minute < 1) and\
+                                (general_object.time_frame_settings[general_object.time_frame][1] == "hour") and\
+                                    (current_time.hour % general_object.time_frame_settings[general_object.time_frame][2] == 0):
+                        if not general_object.confirmation: general_object.update_main_layer()
+                        else: general_object.update_confirmation_layer()
+                    elif (current_time.hour < 1) and\
+                                (current_time.minute < 1) and\
+                                    (general_object.time_frame_settings[general_object.time_frame][1] == "day") and\
+                                        (current_time.day % general_object.time_frame_settings[general_object.time_frame][2] == 0):
+                        if not general_object.confirmation: general_object.update_main_layer()
+                        else: general_object.update_confirmation_layer()
+            time.sleep(1)
+        except Exception as error:
+            if str(error) == str(previous_error):
+                pass
+            else:
+                print(str(error))
+                print(str(previous_error))
+                previous_error = str(error)
+                EMAIL_ACCOUNT.send_email(subject="Connection time out!", my_message=str(error))
