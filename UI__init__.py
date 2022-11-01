@@ -1,26 +1,19 @@
 ###############################################################################
 
 from datetime import datetime
-from datetime import timedelta
-from fileinput import close
-from operator import truediv
-from traceback import print_tb
 from datetime import date, datetime
-from pytz import timezone
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Cursor
 import time
 import pandas as pd
 import numpy as np
 import time
-from webbrowser import get
 from BacktestManagement import management as backtest_management
 from ExchangeManagement import management as exchange_management
 from Global__init__ import backtest_set_input_ui,exchange_set_input_ui
 ###############################################################################
 ########
 from functools import partial
-from re import L
 from ttkwidgets.autocomplete import AutocompleteCombobox
 import customtkinter
 from tkcalendar import Calendar 
@@ -28,9 +21,7 @@ import tkinter.messagebox as mesagebox
 import datetime
 import datetime
 from functools import partial
-from time import sleep, strptime
 from tkinter import *
-from PIL import ImageTk, Image
 import customtkinter
 from datetime import datetime
 import pandas as pd
@@ -41,8 +32,6 @@ from tkcalendar import Calendar, DateEntry
 import numpy as np
 import tkinter.messagebox as mesagebox
 from plyer import notification
-import tkinter  as tk 
-from tkinter import ttk
 
 class ui_color:
     panel_color='white'
@@ -98,7 +87,7 @@ def frm_backtest(frm_backtest=False,frm_trade=False):
         '8HOUR',
         '1DAY'
         ]
-        confirm_list=[]
+        
         frm_=customtkinter.CTk()
         frm_.geometry('600x370')
         if frm_backtest:
@@ -131,9 +120,7 @@ def frm_backtest(frm_backtest=False,frm_trade=False):
                                     time_frame=str(cmb_trading_time.get()),
                                     margin_limit=float(txt_margin_limit.get()),
                                     profit_factor=float(txt_profit_factor.get()),
-                                    loss_factor=float(txt_loss_factor.get()),
-                                    confirmation_layer=confirm_list,
-                                    check_layer_limit=int(cmb_confirmation_count.get()), 
+                                    loss_factor=float(txt_loss_factor.get()),                                  
                                     delta_time_limit=100, 
                                     profit_limit=int(txt_profit_limit.get()),
                                     support_resistance_limit=int(txt_sr_limit.get()),
@@ -156,8 +143,6 @@ def frm_backtest(frm_backtest=False,frm_trade=False):
                                         margin_limit=float(txt_margin_limit.get()),
                                         profit_factor=float(txt_profit_factor.get()),
                                         loss_factor=float(txt_loss_factor.get()),
-                                        confirmation_layer=confirm_list,
-                                        check_layer_limit=int(cmb_confirmation_count.get()), 
                                         delta_time_limit=100, 
                                         profit_limit=int(txt_profit_limit.get()),
                                         support_resistance_limit=int(txt_sr_limit.get()),
@@ -182,8 +167,7 @@ def frm_backtest(frm_backtest=False,frm_trade=False):
 
             since= since_up+' '+txt_h.get()+':'+txt_m.get()+':0'
 
-            print(since)
-            #since= (datetime.fromisoformat(since))
+            
             since= datetime.strptime(since, '%Y/%m/%d %H:%M:%S')
             if set_type=='since':
                  desired_start_time = datetime(year=since.year, month=since.month, day=since.day,
@@ -194,41 +178,7 @@ def frm_backtest(frm_backtest=False,frm_trade=False):
                 hour=since.hour, minute=since.minute, second=59)
                 btn_finish_date.set_text(str(desired_start_time))
 
-        def add_or_remove_confirm_time_frame(action=1):
-
-            if action=='add':
-                value=cmb_confirm_timeframe.get()
-
-                if value in cmb_confirm_timeframe['values']:
-                    confirm_list.append(value)
-                    time_frame_list.remove(value)
-                    cmb_confirm_timeframe['values']=time_frame_list
-                    cmb_selected_confirm_timeframe['values']=confirm_list
-                    #mesagebox.showinfo(f'{str(value)} added to watch list',' added')
-                    cmb_confirm_timeframe.set('')
-                    cmb_selected_confirm_timeframe.set(f'{value}')
-                else:
-                    mesagebox.showerror('Error','It\'s invalied value, please select index of box')
-            else:
-                value=cmb_selected_confirm_timeframe.get()
-                if cmb_selected_confirm_timeframe.get()!='' and value in cmb_selected_confirm_timeframe['values']:
-                    confirm_list.remove(value)
-                    time_frame_list.append(value)
-                    cmb_confirm_timeframe['values']=time_frame_list
-                    cmb_selected_confirm_timeframe['values']=confirm_list
-                    cmb_confirm_timeframe.set(f'{value}')
-                    cmb_selected_confirm_timeframe.set('')
-                    cmb_confirmation_count.set('1')
-
-                    #mesagebox.showinfo(f'{str(value)} remove succesfully','remove')
-                else:
-                    mesagebox.showerror('Error','It\'s invalied value, please select index of box')
-            confrm_count=[]
-            print(len(confirm_list))
-            for count_watchlist in range(0,len(confirm_list)):
-                confrm_count.append(count_watchlist+1)
-            cmb_confirmation_count['values']=confrm_count
-
+       
         def filter_page1(page=1):
             if frm_trade: 
                 if page==2:
@@ -268,14 +218,6 @@ def frm_backtest(frm_backtest=False,frm_trade=False):
             cmb_pair.place_forget()
             lbl_trading_time_frame.place_forget()
             cmb_trading_time.place_forget()
-            lbl_confirmaton_layer.place_forget()
-            cmb_confirm_timeframe.place_forget()
-            lbl_selected_confirm_layer.place_forget()
-            cmb_selected_confirm_timeframe.place_forget()
-            lbl_confirm_count.place_forget()
-            cmb_confirmation_count.place_forget()
-            btn_add.place_forget()
-            btn_remove.place_forget()
             btn_next_1.place_forget()
             pnl_Page2.place_forget()
             lbl_balance.place_forget()
@@ -331,14 +273,6 @@ def frm_backtest(frm_backtest=False,frm_trade=False):
                     cmb_pair.place(relx=space_left,rely=0.22)
                     lbl_trading_time_frame.place(relx=space_left,rely=0.27)
                     cmb_trading_time.place(relx=space_left,rely=0.33)
-                    lbl_confirmaton_layer.place(relx=space_left,rely=0.38)
-                    cmb_confirm_timeframe.place(relx=space_left,rely=0.44)
-                    lbl_selected_confirm_layer.place(relx=space_left,rely=0.49)
-                    cmb_selected_confirm_timeframe.place(relx=space_left,rely=0.55)
-                    lbl_confirm_count.place(relx=space_left,rely=0.60)
-                    cmb_confirmation_count.place(relx=space_left,rely=0.66)
-                    btn_add.place(relx=space_left+0.32,rely=0.42)
-                    btn_remove.place(relx=space_left+0.32,rely=0.545)
                     btn_next_1.place(relx=0.8,rely=0.8)
 
                 else:
@@ -379,14 +313,6 @@ def frm_backtest(frm_backtest=False,frm_trade=False):
                         cmb_pair.place(relx=space_left,rely=0.22)
                         lbl_trading_time_frame.place(relx=space_left,rely=0.27)
                         cmb_trading_time.place(relx=space_left,rely=0.33)
-                        lbl_confirmaton_layer.place(relx=space_left,rely=0.38)
-                        cmb_confirm_timeframe.place(relx=space_left,rely=0.44)
-                        lbl_selected_confirm_layer.place(relx=space_left,rely=0.49)
-                        cmb_selected_confirm_timeframe.place(relx=space_left,rely=0.55)
-                        lbl_confirm_count.place(relx=space_left,rely=0.60)
-                        cmb_confirmation_count.place(relx=space_left,rely=0.66)
-                        btn_add.place(relx=space_left+0.32,rely=0.44)
-                        btn_remove.place(relx=space_left+0.32,rely=0.545)
                         btn_next_1.place(relx=0.8,rely=0.8)
 
                     elif page==2:
@@ -437,14 +363,6 @@ def frm_backtest(frm_backtest=False,frm_trade=False):
         cmb_pair = AutocompleteCombobox(frm_, width=27,height=39,completevalues=pairlist)
         lbl_trading_time_frame=customtkinter.CTkLabel(master=frm_, text='Trading time frame',width=11,height=30,fg_color=('green', 'green'),corner_radius=10)
         cmb_trading_time= AutocompleteCombobox(frm_, width=27,height=39,completevalues=time_frame_list)
-        lbl_confirmaton_layer =customtkinter.CTkLabel(master=frm_, text='Confirm Time frames',width=11,height=30,fg_color=('green', 'green'),corner_radius=10)
-        cmb_confirm_timeframe= AutocompleteCombobox(frm_, width=27,height=39,completevalues= time_frame_list)
-        lbl_selected_confirm_layer=customtkinter.CTkLabel(master=frm_, text='Selected confirm Time frames',width=11,height=30,fg_color=('green', 'green'),corner_radius=10)
-        cmb_selected_confirm_timeframe = AutocompleteCombobox(frm_, width=27)
-        lbl_confirm_count=customtkinter.CTkLabel(master=frm_, text='Confirm count',width=11,height=30,fg_color=('green', 'green'),corner_radius=10)
-        cmb_confirmation_count = AutocompleteCombobox(frm_, text='0',width=27)
-        btn_add = customtkinter.CTkButton(frm_, text='+',width=11,command=partial(add_or_remove_confirm_time_frame,'add'),hover_color=ui_color.btn_hover_color)
-        btn_remove = customtkinter.CTkButton(frm_, text='- ',width=11,command=partial(add_or_remove_confirm_time_frame,'remove'),hover_color=ui_color.btn_hover_color)
         btn_next_1 = customtkinter.CTkButton(frm_, text=' >> ',command=partial(filter_page1,2),hover_color=ui_color.btn_hover_color)
 
         #page2
@@ -687,39 +605,11 @@ def frm_anlize():
                 for y in change_profit[0]:
                     plt.hlines(y = float(y), xmin = x, xmax = len(chart_data['Close'])-10, color = colors_list[color_index], linewidth = 1, label = 'linewidth = 1, default capstyle')
                 break """   
-            
-            
-                                
-
-                        
-                    
-                    
-            
-
-                            
-
-
-
-
-
-
-
-
-
-
-
-
-            
         
         plt.tight_layout()
         
         plt.show()
         
-    def date_and_time(event):
-        index_value=int(event.xdata)
-        
-        plt.xlabel(chart_data['Time'][index_value])
-
     def mouse_move(event):
         global flag
         if flag==False and event.xdata !=None:
@@ -788,8 +678,6 @@ def frm_anlize():
         fig.canvas.mpl_connect('button_press_event', onclick)
         plt.tight_layout()
         plt.show()
-
-
 
 
     frm_=customtkinter.CTk()
@@ -869,6 +757,5 @@ def frm_main():
         btn_settings.place(relx=0.1,rely=0.65)
         btn_exit.place(relx=0.5,rely=0.65)
         frm_.mainloop()
-
 
 frm_main()
