@@ -28,5 +28,4 @@
 # ###############################################################################
 
 # # Email Accounts:
-# EMAIL_ACCOUNT = Email(port=465, smtp_server='smtp.gmail.com', sender_email='mytraderbot2022@gmail.com', receiver_email=[
-#                             'nobahar.behrooz@gmail.com', 'majidedalatjou@gmail.com'], sender_email_password='opiiikwrxmrvkrkh')
+# EMAIL_ACCOUNT = Email(port=465, smtp_server='smtp.gmail.com', sender_email='sender email', receiver_email=[list of reciver], sender_email_password='********')
